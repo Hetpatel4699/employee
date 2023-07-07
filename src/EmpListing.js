@@ -72,7 +72,7 @@ const EmpListing = () => {
                                         <td>{item.title}</td>
                                         <td>{item.description}</td>
                                         <td>{item.cover}</td>
-                                        <td>
+                                        <td className='text-center'>
                                             <a onClick={() => { LoadEdit(item.id) }} className='btn btn-success'>Edit</a>
                                             <a onClick={() => { Removefunction(item.id) }} className='btn btn-danger'>Remove</a>
                                             <a onClick={() => { LoadDetail(item.id) }} className='btn btn-primary'>Details</a>

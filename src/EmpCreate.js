@@ -126,8 +126,8 @@ const EmpCreate = () => {
                 <h2>Employ Create</h2>
                 <form onSubmit={handlesubmit}>
                     <div className="user-box">
-                        <input value={id} disabled="disabled"></input>
-                        <label>ID</label>
+                        {/* <input value={id} disabled="disabled"></input>
+                        <label>ID</label> */}
                     </div>
                     <div className="user-box">
                         <input
