@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import './EmpListing.css'
 
 const EmpListing = () => {
     const [empdata, empdatachange] = useState(null);
@@ -11,13 +12,27 @@ const EmpListing = () => {
     const LoadEdit = (id) => {
         navigate("/employee/edit/" + id);
     }
+
+    function getAllData(){
+        fetch("http://192.168.0.48:9000/books").then((res) => {
+            return res.json()
+        }).then((resp) => {
+            empdatachange(resp);
+        }).catch((err) => {
+            console.log(err.message);
+        })
+    
+    }
+
     const Removefunction = (id) => {
         if (window.confirm('Do you want to remove?')) {
-            fetch("http://192.168.0.48:9000/deleteBook/" + id, {
-                method: "DELETE"
+            fetch("http://192.168.0.48:9000/deleteBook", {
+                method: "DELETE",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({id}),
             }).then((res) => {
                 alert('Removed Successfully.')
-                window.location.reload();
+                getAllData()
             }).catch((err) => {
                 console.log(err.message)
             })
@@ -26,15 +41,8 @@ const EmpListing = () => {
 
     }
 
-
     useEffect(() => {
-        fetch("http://192.168.0.48:9000/books").then((res) => {
-            return res.json()
-        }).then((resp) => {
-            empdatachange(resp);
-        }).catch((err) => {
-            console.log(err.message);
-        })
+        getAllData()
     }, [])
     return (
         <div className='container'>
@@ -50,9 +58,9 @@ const EmpListing = () => {
                         <thead className='table-dark'>
                             <tr>
                                 <td>ID</td>
-                                <td>Name</td>
-                                <td>Email</td>
-                                <td>Phone</td>
+                                <td>Title</td>
+                                <td>Description</td>
+                                <td>Cover</td>
                                 <td>Action</td>
                             </tr>
                         </thead>
@@ -61,9 +69,9 @@ const EmpListing = () => {
                                 empdata.map(item => (
                                     <tr key={item.id}>
                                         <td>{item.id}</td>
-                                        <td>{item.name}</td>
-                                        <td>{item.email}</td>
-                                        <td>{item.phone}</td>
+                                        <td>{item.title}</td>
+                                        <td>{item.description}</td>
+                                        <td>{item.cover}</td>
                                         <td>
                                             <a onClick={() => { LoadEdit(item.id) }} className='btn btn-success'>Edit</a>
                                             <a onClick={() => { Removefunction(item.id) }} className='btn btn-danger'>Remove</a>

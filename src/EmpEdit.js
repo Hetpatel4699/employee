@@ -6,36 +6,46 @@ const EmpEdit = () => {
 
   // const [empdata, empdatachange] = useState({})
 
-  useEffect(() => {
-    fetch("http://192.168.0.48:9000/books/" + empid).then((res) => {
+  
+  const [id, idchange] = useState(empid);
+  const [title, titlechange] = useState("");
+  const [description, descriptionchange] = useState("");
+  const [cover, coverchange] = useState("");
+  const [active, activechange] = useState(true);
+  const [validation, valchange] = useState(false);
+  
+  const navigate = useNavigate();
+  
+  function getAllData(){
+    fetch("http://192.168.0.48:9000/books").then((res) => {
       return res.json();
     }).then((resp) => {
-      idchange(resp.id);
-      namechange(resp.name);
-      emailchange(resp.email);
-      phonechange(resp.phone);
-      activechange(resp.isactive);
+      resp.map((item) => {
+        if(item.id == empid){
+          idchange(item.id)
+          titlechange(item.title)
+          descriptionchange(item.description)
+          coverchange(item.cover)
+          activechange(item.isactive)
+        }
+        return;
+    })
     }).catch((err) => {
       console.log(err.message);
     })
-  }, []);
+  }
 
-  const [id, idchange] = useState("");
-  const [name, namechange] = useState("");
-  const [email, emailchange] = useState("");
-  const [phone, phonechange] = useState("");
-  const [active, activechange] = useState(true);
-  const [validation, valchange] = useState(false);
-
-  const navigate = useNavigate();
+useEffect(() => {
+  getAllData()
+}, []);
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    const empdata = { id, name, email, phone, active  };
+    const empdata = { id, title, description, cover, active  };
     
 
-    fetch("http://192.168.0.48:9000/updateBook/"+empid, {
-      method: "PUT",
+    fetch("http://192.168.0.48:9000/updateBook", {
+      method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(empdata)
     }).then((res) => {
@@ -62,41 +72,41 @@ const EmpEdit = () => {
                 <div className='col-lg-12'>
                   <div className='form-group'>
                     <label>ID</label>
-                    <input value={id} disabled="disabled" className='form-control' ></input>
+                    <input value={id ||''} disabled="disabled" className='form-control' ></input>
                   </div>
                 </div>
 
                 <div className='col-lg-12'> 
                   <div className='form-group'>
-                    <label>Name</label>
-                    <input  required value={name} onMouseDown={e => valchange(true)} onChange={e => namechange(e.target.value)} className='form-control'></input>
-                   {name.length ==0 &&  validation  && <span className='text-danger'>Enter the name</span>}
+                    <label>Title</label>
+                    <input  required value={title || ''} onMouseDown={e => valchange(true)} onChange={e => titlechange(e.target.value)} className='form-control'></input>
+                   {title.length ==0 &&  validation  && <span className='text-danger'>Enter the title</span>}
                   </div>
                 </div>
 
                 <div className='col-lg-12'>
                   <div className='form-group'>
-                    <label>Email</label>
-                    <input value={email} onChange={e => emailchange(e.target.value)} className='form-control'></input>
+                    <label>Description</label>
+                    <input value={description || ''} onChange={e => descriptionchange(e.target.value)} className='form-control'></input>
                   </div>
                 </div>
 
                 <div className='col-lg-12'>
                   <div className='form-group'>
-                    <label>Phone</label>
-                    <input value={phone} onChange={e => phonechange(e.target.value)} className='form-control'></input>
+                    <label>Cover</label>
+                    <input value={cover || ''} onChange={e => coverchange(e.target.value)} className='form-control'></input>
                   </div>
                 </div>
 
                 <div className='col-lg-12'>
                   <div className='form-check'>
-                    <input checked={active} onChange={e => activechange(e.target.checked)} type="checkbox" className='form-check-input'></input>
+                    <input checked={true} onChange={e => activechange(!active)} type="checkbox" className='form-check-input'></input>
                     <label className='form-check-label'>Is Active</label>
                   </div>
                 </div>
                 <div className='col-lg-12'>
                   <div className='form-group'>
-                    <button className='btn btn-success' type='submit'>Save</button>
+                  <input value="save" className='btn btn-success float-end' type='submit' />
                     <Link to="/" className='btn btn-danger'>Back</Link>
                   </div>
                 </div>

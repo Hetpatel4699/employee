@@ -7,10 +7,14 @@ const EmpDetail = () => {
   const [empdata, empdatachange] = useState({})
 
   useEffect(() => {
-    fetch("http://192.168.0.48:9000/books/" + empid).then((res) => {
+    fetch("http://192.168.0.48:9000/books/").then((res) => {
       return res.json();
     }).then((resp) => {
-      empdatachange(resp);
+      resp.map((item) => {
+        if(item.id == empid){
+          empdatachange(item)
+        }
+      })
     }).catch((err) => {
       console.log(err.message);
     })
@@ -27,10 +31,10 @@ const EmpDetail = () => {
 
       {empdata &&
       <div>
-        <h2> The Employee name is :{empdata.name} ({empdata.id})</h2>
+        <h2> The Employee name is :{empdata.title} ({empdata.id})</h2>
         <h3>contact detail</h3>
-        <h5> Email is : {empdata.email}</h5>
-        <h5>Phone is : {empdata.phone}</h5>
+        <h5> Description is : {empdata.description}</h5>
+        <h5>Cover is : {empdata.cover}</h5>
         <Link className="btn btn-danger" to="/">Back to Listing</Link>
         </div>
       }

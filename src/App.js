@@ -8,8 +8,8 @@ import EmpEdit from './EmpEdit';
 
 function App() {
   return (
-    <div className="App">
-      <h1>React JS CURD Operations</h1>
+    <div style={{marginTop:"3vh"}}>
+      <h1 className='text-center' style={{color:"#03e9f4"}}>React JS CURD Operations</h1>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<EmpListing />}></Route>
